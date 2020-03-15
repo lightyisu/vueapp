@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>noteApp</title>
+    <style>
+        div{
+            padding-top: 200px;
+            padding-left: 200px;
+        }
+        input{
+            background-color: blanchedalmond;
+            border: none;
+            padding:20px;
+            width: 400px;
+            outline: none;
+
+        }
+        ol{
+           
+            width: 400px;
+            padding: 25px;
+            
+        }
+        li{
+            background-color: blanchedalmond;
+            margin: 10px;
+            padding: 15px;
+            border-radius: 4px;
+        }
+        .delete{
+          float: right;
+          color: red;
+          cursor: pointer;
+          
+        }
+        #clear{
+            float: right;
+            cursor: pointer;
+        }
+       
+    </style>
+    </head>
+    <body>
+        
+        <div id="app">
+        <h1>note for everyone </h1>
+        <input placeholder="请输入" v-on:keyup.enter="addList" v-model='currentTodo'>
+        <ol>
+            <li v-for="(list,index) in todo" @mouseenter.stop='displayDel' @mouseleave.stop='remove'>{{list}}
+                <span class="delete" v-show="isDisplay" @click="deleteit(index)">删除</span>
+            </li>
+            <p v-show="todo.length!=0">{{todo.length}} 项需要您去做</p>
+            <span id="clear" v-show="todo.length!=0" @click="clear">清空</span>
+        </ol>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        var vm=new Vue({
+            el:'#app',
+            data:{
+                todo:[],
+                currentTodo:'',
+                isDisplay:false,
+                
+            },
+            methods:{
+                addList:function(){
+                  this.todo.push(this.currentTodo);
+                },
+                displayDel:function(){
+                    this.isDisplay=true;
+                },
+                remove:function(){
+                    this.isDisplay=false;
+                },
+                deleteit:function(index){
+                       this.todo.splice(index,1);
+                },
+                clear:function(){
+                    this.todo=[];
+                }
+            }
+        })
+
+    </script>
+    </body>
+</html>
