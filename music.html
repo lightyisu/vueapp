@@ -81,7 +81,7 @@
                     getSong:function(){
                         var that=this;
                 
-                        axios.get(`http://musicapi.leanapp.cn/search?keywords=${that.songName}`).then(function(response){
+                        axios.get(`https://musicapi.leanapp.cn/search?keywords=${that.songName}`).then(function(response){
                             console.log(response);
                             console.log(that.songName);
                             that.songList=response.data.result.songs;
