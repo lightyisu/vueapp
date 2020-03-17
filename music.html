@@ -81,6 +81,25 @@
             left: 10vw;
         }
         @media screen and (max-width: 700px){
+            #pic{
+            
+            float: left;
+            width: 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            -webkit-filter: blur(3px);
+            -moz-filter: blur(3px);
+            -o-filter: blur(3px);
+            -ms-filter: blur(3px);
+            filter: blur(3px);
+            height: 100vh;
+            position: fixed;
+            bottom: 0;
+        }
+        h1{
+            color: black;
+        }
             input:focus {
             width: 70vw;
         }
@@ -100,10 +119,12 @@
          audio{
              margin:20px ;
          }
+         
         }
         span{
             display: block;
         }
+       
        
     </style>
 </head>
@@ -114,8 +135,9 @@
 
 
 
-
+   
     <div id="app">
+        <div id="pic" :style="{background:'url('+coverUrl+')'}"></div>
         <section>
             <h1>Music for everyone</h1>
             <input v-model="songName" @keyup.enter='getSong'>
