@@ -1,31 +1,59 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
     <style>
-        input{
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        div {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+
+        }
+
+        input {
+            margin-top: 10px;
             background-color: orangered;
             padding: 20px;
             border: none;
             outline: none;
-            width: 300px;
+            width: 20vw;
             border-radius: 30px;
             color: white;
             font-weight: bold;
+            display: block;
+            transition: width 1s;
+            -moz-transition: width 1s;
+            /* Firefox 4 */
+            -webkit-transition: width 1s;
+            /* Safari and Chrome */
+            -o-transition: width 1s;
+            /* Opera */
         }
-        div{
-            padding-left: 200px;
-            padding-top: 30px;
-        }
-        ul{
+
+        ul {
             display: inline-block;
             margin: 0;
             height: 400px;
             overflow: auto;
             width: 400px;
-          padding: 0;
+            padding: 0;
         }
-        li{
+
+        li {
             list-style: none;
             background-color: orangered;
             color: white;
@@ -35,86 +63,147 @@
             margin-top: 14px;
             cursor: pointer;
         }
-       img{
-           display: inline-block;
-           width: 200px;
-           margin-left: 30px;
-           border-radius: 5px;
-       }
-        audio{
+
+        img {
+            display: inline-block;
+            width: 200px;
+            margin-left: 30px;
+            border-radius: 5px;
+        }
+
+        audio {
             outline: none;
         }
+
+        section {
+            position: absolute;
+            top: 10vh;
+            left: 10vw;
+        }
+        @media screen and (max-width: 700px){
+            input:focus {
+            width: 70vw;
+        }
+          img{
+              display: block;
+              text-align: center;
+              margin-left: 70px;
+          }
+        li{
+            font-size: 10px;
+            padding: 10px;
+            width: 80vw;
+        }
+        ul{
+            height: 80vw;
+        }
+         audio{
+             margin:20px ;
+         }
+        }
+        span{
+            display: block;
+        }
+       
     </style>
-    </head>
-    
-    <body>
-        
-        <div id="app">
+</head>
+
+<body>
+
+
+
+
+
+
+    <div id="app">
+        <section>
             <h1>Music for everyone</h1>
             <input v-model="songName" @keyup.enter='getSong'>
-            <span v-if="count!=0">以下是为您搜到的{{count}}条结果</span>
-            <section>
+           
+
             <ul>
-                <li v-for="song in songList" @click="getPlay(song.id,song.name,song.artists[0].name),getCover(song.id)">歌名:{{song.name}}  歌手:{{song.artists[0].name}}</li>
+                <li v-for="song in songList" @click="getPlay(song.id,song.name,song.artists[0].name),getCover(song.id)">
+                    歌名:{{song.name}} 歌手:{{song.artists[0].name}}</li>
             </ul>
+            
             <img v-bind:src="coverUrl">
-            </section>
+            <span v-if="count!=0">以上是为您搜到的{{count}}条结果</span>
             <p>正在为您播放 {{songNow}}</p>
             <audio v-bind:src="playSrc" controls="controls" autoplay="true">fs</audio>
-        </div>
-        
-        <script crossorigin="anonymous" integrity="sha384-n1p+NckrH3jg+8KyXCEJPsETONv97bIEaeeov6+LkuLxo6xLmitGBeADhAOlMYa0" src="https://lib.baomitu.com/axios/0.19.2/axios.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-        <script>
-            var vm=new Vue({
-                el:'#app',
-                data:{
-                    songName:'',
-                    songList:[],
-                    count:0,
-                    id:'',
-                    playSrc:'',
-                    songNow:'',
-                    coverUrl:'',
-                },
-                methods:{
-                    getSong:function(){
-                        var that=this;
-                
-                        axios.get(`https://musicapi.leanapp.cn/search?keywords=${that.songName}`).then(function(response){
+        </section>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script crossorigin="anonymous" integrity="sha384-n1p+NckrH3jg+8KyXCEJPsETONv97bIEaeeov6+LkuLxo6xLmitGBeADhAOlMYa0"
+        src="https://lib.baomitu.com/axios/0.19.2/axios.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                songName: '',
+                songList: [],
+                count: 0,
+                id: '',
+                playSrc: '',
+                songNow: '',
+                coverUrl: '',
+            },
+            methods: {
+                getSong: function () {
+                    var that = this;
+
+                    axios.get(`https://musicapi.leanapp.cn/search?keywords=${that.songName}`).then(
+                        function (response) {
                             console.log(response);
                             console.log(that.songName);
-                            that.songList=response.data.result.songs;
-                            that.count=response.data.result.songs.length;
-                        
-                        },function(error){
-                        console.log(error)})
-                    },
-                    getPlay:function(id,name,artists){
-                        var that=this;
-                       
-                        axios.get(`https://autumnfish.cn/song/url?id=${id}`).then(function(response){
-                            console.log(response);
-                            that.playSrc=response.data.data[0].url;
-                            that.songNow=`${name}   by ${artists}`;
-                        },function(err){
-                            console.log(err);
-                        })
+                            that.songList = response.data.result.songs;
+                            that.count = response.data.result.songs.length;
 
-                    },
-                    getCover:function(id){
-                        var that=this;
-                        axios.get(`https://autumnfish.cn/song/detail?ids=${id}`).then(function(response){
-                            console.log(response.data.songs[0].al.picUrl);
-                            that.coverUrl=response.data.songs[0].al.picUrl;
-                        },function(err){
-                            console.log(err);
+                        },
+                        function (error) {
+                            console.log(error)
                         })
-                    }
-                   
+                },
+                getPlay: function (id, name, artists) {
+                    var that = this;
+
+                    axios.get(`https://autumnfish.cn/song/url?id=${id}`).then(function (response) {
+                        console.log(response);
+                        that.playSrc = response.data.data[0].url;
+                        that.songNow = `${name}   by ${artists}`;
+                    }, function (err) {
+                        console.log(err);
+                    })
+
+                },
+                getCover: function (id) {
+                    var that = this;
+                    axios.get(`https://autumnfish.cn/song/detail?ids=${id}`).then(function (response) {
+                        console.log(response.data.songs[0].al.picUrl);
+                        that.coverUrl = response.data.songs[0].al.picUrl;
+                    }, function (err) {
+                        console.log(err);
+                    })
                 }
-            })
-           
-        </script>
-    </body>
+
+            }
+        })
+    </script>
+</body>
+
 </html>
