@@ -45,7 +45,7 @@
         
         <div id="app">
         <h1>note for everyone </h1>
-        <input placeholder="请输入" v-on:keyup.enter="addList" v-model='currentTodo'>
+        <input placeholder="请输入" v-on:keyup.enter="addList($event.target.value)">
         <ol>
             <li v-for="(list,index) in todo" @mouseenter.stop='displayDel' @mouseleave.stop='remove'>{{list}}
                 <span class="delete" v-show="isDisplay" @click="deleteit(index)">删除</span>
@@ -64,9 +64,17 @@
                 isDisplay:false,
                 
             },
+           updated:function(){
+            //本地存储，类型：数组！！！
+              localStorage.setItem("a",JSON.stringify(this.todo));
+        
+
+           }
+            ,
             methods:{
-                addList:function(){
-                  this.todo.push(this.currentTodo);
+                addList:function(value){
+                 this.todo.push(value);
+           
                 },
                 displayDel:function(){
                     this.isDisplay=true;
@@ -82,7 +90,10 @@
                 }
             }
         })
-
+        //进行预先配置 载入缓存数据实现本地存储
+        var lo=JSON.parse(localStorage.getItem("a"));
+        vm.todo=lo;
+    
     </script>
     </body>
 </html>
